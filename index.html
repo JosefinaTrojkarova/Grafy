@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Počet neorientovaných grafů na N vrcholech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" xintegrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" xintegrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctApi0givMi" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" xintegrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Geist', sans-serif;
+            background-color: #080807;
+            color: #DDDDDA;
+            overflow: hidden; /* Prevent main page scroll */
+        }
+        .katex { font-size: 1.375em; }
+        .tab-section {
+            border-bottom: 1px solid #393632;
+        }
+        .uppercase {
+            font-family: 'Geist Mono', monospace;
+            color: #9e9e9d;
+        }
+        .tab-trigger {
+            border-bottom: solid 1px transparent;
+            transition: all 0.3s ease;
+
+            &:hover {
+                border-bottom: solid 1px #DDDDDA;
+                svg {
+                    transform: rotate(30deg);
+                }
+            }
+
+            &.active {
+                border-bottom: solid 1px #393632;
+
+                &:hover {
+                    border-bottom: solid 1px #DDDDDA;
+                    svg {
+                        transform: rotate(150deg);
+                    }
+                }
+            }
+        }
+        .tab-trigger svg {
+            transition: transform 0.3s ease;
+        }
+        .tab-trigger.active svg {
+            transform: rotate(180deg);
+        }
+        .tab-content {
+            max-height: 0;
+            overflow: hidden;
+        }
+        .tab-content-inner {
+            padding: 2rem 0;
+            padding-right: 1rem;
+            box-sizing: border-box;
+        }
+        /* Custom scrollbar for tab content */
+        .tab-content::-webkit-scrollbar { width: 8px; }
+        .tab-content::-webkit-scrollbar-track { background: #1a1a1a; }
+        .tab-content::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+        .tab-content::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Top Bar -->
+    <header id="top-bar" class="w-full py-4 md:py-8">
+        <div class="w-full px-4 md:px-10 flex text-m tracking-widest">
+            <span class="text-4xl w-1/2">Teorie Grafů</span>
+            <div class="w-1/2 flex justify-between">
+                <span class="uppercase">Cajthamlovský projekt</span>
+                <span class="uppercase">Podzim 2025</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="flex-grow w-full px-4 md:px-10 py-4 md:py-10 grid grid-cols-1 md:grid-cols-2 items-end">
+        <!-- Bottom Left: Explanation -->
+        <div class="space-y-4 mr-32 gap-6">
+            <p class="text-4xl mb-10">
+                Tato stránka se zabývá kombinatorickým problémem určení celkového počtu možných neorientovaných grafů na <i>n</i> vrcholech.
+            </p>
+            <div class="flex gap-10 text-xl uppercase">
+                <p>Andrej Pečeňa</p><p>&</p><p>Github Copilot</p>
+            </div>
+        </div>
+
+        <!-- Bottom Right: Expandable Tabs -->
+        <div class="w-full">
+            <div>
+                <!-- Tab 1 -->
+                <div class="tab-section">
+                    <div class="tab-trigger flex justify-between items-center py-4 cursor-pointer" data-target="content-1">
+                        <span class="text-xl">1. Nalezení vzorce</span>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div id="content-1" class="tab-content">
+                        <div class="tab-content-inner">
+                            <div class="space-y-4 text-gray-300 leading-relaxed text-lg">
+                                <p>Naším cílem je zjistit, kolik různých neorientovaných grafů může existovat na daném počtu vrcholů, který označíme jako <span class="font-semibold text-white">n</span>.</p>
+                                <p>Nejprve si ujasněme, co definuje graf. Graf je tvořen množinou vrcholů a množinou hran, které tyto vrcholy spojují. Pro náš případ uvažujeme <span class="font-semibold text-white">n</span> pevných, rozlišitelných vrcholů. Dva grafy se liší, pokud mají odlišnou množinu hran.</p>
+                                <p>Klíčová otázka tedy zní: kolik je všech možných hran, které mohou v grafu s <span class="font-semibold text-white">n</span> vrcholy existovat? Hrana v neorientovaném grafu je definována jako neuspořádaná dvojice různých vrcholů. To je klasická kombinatorická úloha: kolika způsoby můžeme vybrat 2 vrcholy z celkového počtu <span class="font-semibold text-white">n</span>?</p>
+                                <p>Počet takových dvojic je dán kombinačním číslem "n nad 2": \[\binom{n}{2} = \frac{n(n-1)}{2}\] Tento výraz nám udává maximální počet hran v grafu o <span class="font-semibold text-white">n</span> vrcholech (tzv. úplný graf).</p>
+                                <p>Nyní pro každou z těchto potentiálních hran máme dvě možnosti: buď v konkrétním grafu <span class="font-semibold text-white">existuje</span>, nebo <span class="font-semibold text-white">neexistuje</span>. Jelikož máme \(\binom{n}{2}\) nezávislých hran a pro každou z nich 2 možnosti, celkový počet kombinací (a tedy různých grafů) získáme použitím pravidla součinu.</p>
+                                <p>Výsledný vzorec pro počet neorientovaných grafů na <span class="font-semibold text-white">n</span> vrcholech je: \[N_G = 2^{\binom{n}{2}} = 2^{\frac{n(n-1)}{2}}\]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2 -->
+                <div class="tab-section">
+                    <div class="tab-trigger flex justify-between items-center py-4 cursor-pointer" data-target="content-2">
+                        <span class="text-xl">2. Důkaz správnosti</span>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div id="content-2" class="tab-content">
+                        <div class="tab-content-inner">
+                            <div class="space-y-4 text-gray-300 leading-relaxed text-lg">
+                                <p>Důkaz si můžeme představit pomocí jednoduché myšlenkové úvahy.</p>
+                                <ol class="list-decimal list-inside space-y-3">
+                                    <li><strong>Představme si všechny možné hrany:</strong> Máme <span class="font-semibold text-white">n</span> vrcholů. Jak jsme si ukázali v předchozí kapitole, maximální počet hran, které mezi nimi mohou vést, je přesně \(\binom{n}{2}\). Můžeme si představit seznam všech těchto \(\binom{n}{2}\) potenciálních hran.</li>
+                                    <li><strong>Rozhodnutí pro každou hranu:</strong> Nyní, když chceme vytvořit nějaký konkrétní graf, musíme pro každou jednu hranu z tohoto seznamu učinit jednoduché rozhodnutí: Bude tato hrana v našem grafu, nebo ne? Máme tedy pro ni dvě možnosti: <span class="font-semibold text-white">ANO</span>, nebo <span class="font-semibold text-white">NE</span>.</li>
+                                    <li><strong>Nezávislé volby:</strong> Rozhodnutí pro jednu hranu nijak neovlivňuje rozhodnutí pro jakoukoliv jinou hranu. Jsou to nezávislé volby.</li>
+                                    <li><strong>Pravidlo součinu:</strong> Máme \(\binom{n}{2}\) pozic (potenciálních hran) a pro každou z nich máme 2 možnosti. Podle základního kombinatorického pravidla součinu je celkový počet možností roven součinu počtu voleb pro každou pozici.</li>
+                                    <li><strong>Výpočet:</strong> Celkový počet kombinací je tedy \(2 \times 2 \times 2 \times \dots \times 2\), kde dvojku násobíme celkem \(\binom{n}{2}\)-krát.</li>
+                                    <li>To je z definice mocniny rovno \(2^{\binom{n}{2}}\). Každá tato unikátní kombinace voleb "ANO/NE" odpovídá jednomu unikátnímu grafu. Tím je vzorec dokázán.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3 -->
+                <div class="tab-section">
+                    <div class="tab-trigger flex justify-between items-center py-4 cursor-pointer" data-target="content-3">
+                        <span class="text-xl">3. Tabulka hodnot</span>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div id="content-3" class="tab-content">
+                        <div class="tab-content-inner">
+                            <h3 class="text-2xl font-bold mb-4">Počet grafů pro n = 1 až 10</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full text-left border-collapse">
+                                    <thead class="border-b border-gray-700">
+                                        <tr>
+                                            <th class="p-4 font-bold text-white">Počet vrcholů (n)</th>
+                                            <th class="p-4 font-bold text-white">Počet možných hran \(\binom{n}{2}\)</th>
+                                            <th class="p-4 font-bold text-white">Celkový počet grafů \(2^{\binom{n}{2}}\)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-gray-300">
+                                        <tr class="border-b border-gray-800"><td class="p-4">1</td><td class="p-4">0</td><td class="p-4">1</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-4">2</td><td class="p-4">1</td><td class="p-4">2</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-4">3</td><td class="p-4">3</td><td class="p-4">8</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-4">4</td><td class="p-4">6</td><td class="p-4">64</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-4">5</td><td class="p-4">10</td><td class="p-4">1 024</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-4">6</td><td class="p-4">15</td><td class="p-4">32 768</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-4">7</td><td class="p-4">21</td><td class="p-4">2 097 152</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-4">8</td><td class="p-4">28</td><td class="p-4">268 435 456</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-4">9</td><td class="p-4">36</td><td class="p-4">68 719 476 736</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-4">10</td><td class="p-4">45</td><td class="p-4">35 184 372 088 832</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4 -->
+                <div class="tab-section">
+                    <div class="tab-trigger flex justify-between items-center py-4 cursor-pointer" data-target="content-4">
+                        <span class="text-xl">4. Asymptotický růst</span>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div id="content-4" class="tab-content">
+                        <div class="tab-content-inner">
+                            <div class="space-y-4 text-gray-300 leading-relaxed text-lg">
+                                <p>Zajímá nás, jak rychle roste počet grafů v závislosti na počtu vrcholů <span class="font-semibold text-white">n</span>, když se <span class="font-semibold text-white">n</span> blíží k nekonečnu. K tomu používáme O-notaci.</p>
+                                <p>Náš vzorec je \(f(n) = 2^{\frac{n(n-1)}{2}} = 2^{\frac{n^2 - n}{2}}\).</p>
+                                <p>Pro velká <span class="font-semibold text-white">n</span> je člen <span class="font-semibold text-white">\(n^2\)</span> v exponentu dominantní a člen <span class="font-semibold text-white">\(-n\)</span> je zanedbatelný. Můžeme tedy říci, že funkce roste zhruba jako \(2^{\frac{n^2}{2}}\).</p>
+                                <p>V O-notaci zanedbáváme konstantní faktory v exponentu (v tomto případě \(1/2\)). Asymptotickou složitost tedy můžeme zapsat jako: \[O\left(2^{n^2}\right)\]</p>
+                                <p>Jedná se o <span class="font-semibold text-white">dvojitě exponenciální růst</span> vzhledem k základu a exponenciální vzhledem k <span class="font-semibold text-white">n</span>, ale s <span class="font-semibold text-white">\(n^2\)</span> v exponentu. Růst je tedy extrémně rychlý, což je patrné i z hodnot v tabulce. Počet možných grafů se s každým přidaným vrcholem dramaticky zvyšuje.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // KaTeX rendering
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true}, {left: "\\[", right: "\\]", display: true},
+                    {left: "$", right: "$", display: false}, {left: "\\(", right: "\\)", display: false}
+                ]
+            });
+
+            // FAQ-style expandable tabs with GSAP
+            const triggers = document.querySelectorAll('.tab-trigger');
+            let isAnimating = false;
+
+            const getContentHeight = (content) => {
+                // Use a more stable measurement approach
+                const contentInner = content.querySelector('.tab-content-inner');
+                
+                // Create a temporary clone to measure without affecting the original
+                const clone = contentInner.cloneNode(true);
+                clone.style.position = 'absolute';
+                clone.style.visibility = 'hidden';
+                clone.style.height = 'auto';
+                clone.style.maxHeight = 'none';
+                clone.style.width = contentInner.offsetWidth + 'px';
+                
+                document.body.appendChild(clone);
+                const height = clone.offsetHeight;
+                document.body.removeChild(clone);
+                
+                return height;
+            };
+
+            const closeTab = (trigger, content, duration = 0.4) => {
+                trigger.classList.remove('active');
+                return gsap.to(content, {
+                    maxHeight: '0px', // Use exact pixel values
+                    duration: duration,
+                    ease: 'power2.inOut', // Same easing as opening
+                    onComplete: () => {
+                        content.style.overflow = 'hidden';
+                    }
+                });
+            };
+
+            const openTab = (trigger, content, duration = 0.4) => {
+                trigger.classList.add('active');
+                const targetHeight = getContentHeight(content);
+                const maxViewportHeight = window.innerHeight * 0.6;
+                
+                // Determine final height and overflow state upfront
+                const finalHeight = Math.min(targetHeight, maxViewportHeight);
+                const needsScrolling = targetHeight > maxViewportHeight;
+                
+                // Ensure smooth initial state without visual jumps
+                content.style.overflow = 'hidden';
+                content.style.maxHeight = '0px';
+                
+                return gsap.to(content, {
+                    maxHeight: finalHeight + 'px', // Always use pixels to prevent jumping
+                    duration: duration,
+                    ease: 'power2.inOut', // Same easing as closing
+                    onComplete: () => {
+                        // Only change overflow, never change height here
+                        content.style.overflow = needsScrolling ? 'auto' : 'hidden';
+                    }
+                });
+            };
+
+            const toggleTab = async (trigger, content) => {
+                if (isAnimating) return;
+                isAnimating = true;
+
+                const isActive = trigger.classList.contains('active');
+
+                if (isActive) {
+                    // Close the current tab
+                    await closeTab(trigger, content, 0.4);
+                } else {
+                    // Find currently active tab and run close/open animations simultaneously
+                    const animationPromises = [];
+                    
+                    // Close all other active tabs
+                    triggers.forEach(otherTrigger => {
+                        if (otherTrigger !== trigger && otherTrigger.classList.contains('active')) {
+                            const otherTarget = otherTrigger.getAttribute('data-target');
+                            const otherContent = document.getElementById(otherTarget);
+                            animationPromises.push(closeTab(otherTrigger, otherContent, 0.4));
+                        }
+                    });
+                    
+                    // Open the new tab simultaneously with the same duration
+                    animationPromises.push(openTab(trigger, content, 0.4));
+                    
+                    // Wait for both animations to complete
+                    await Promise.all(animationPromises);
+                }
+
+                isAnimating = false;
+            };
+
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = trigger.getAttribute('data-target');
+                    const targetContent = document.getElementById(targetId);
+                    toggleTab(trigger, targetContent);
+                });
+            });
+
+            // Initialize all tabs as closed with proper GSAP state
+            triggers.forEach(trigger => {
+                const targetId = trigger.getAttribute('data-target');
+                const targetContent = document.getElementById(targetId);
+                gsap.set(targetContent, { 
+                    maxHeight: '0px', 
+                    overflow: 'hidden',
+                    immediateRender: true // Ensure immediate application
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+
