@@ -19,7 +19,7 @@
             color: #DDDDDA;
             overflow: hidden; /* Prevent main page scroll */
         }
-        .katex { font-size: 1.375em; }
+        .katex { font-size: 1em; }
         .tab-section {
             border-bottom: 1px solid #393632;
         }
@@ -58,25 +58,27 @@
         .tab-content {
             max-height: 0;
             overflow: hidden;
+            /* Use overlay scrollbar to prevent layout shift */
+            scrollbar-gutter: stable;
         }
         .tab-content-inner {
-            padding: 2rem 0;
-            padding-right: 1rem;
+            padding: 1.5rem 0;
+            padding-right: 0.75rem;
             box-sizing: border-box;
         }
         /* Custom scrollbar for tab content */
-        .tab-content::-webkit-scrollbar { width: 8px; }
+        .tab-content::-webkit-scrollbar { width: 6px; }
         .tab-content::-webkit-scrollbar-track { background: #1a1a1a; }
-        .tab-content::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+        .tab-content::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
         .tab-content::-webkit-scrollbar-thumb:hover { background: #555; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
     <!-- Top Bar -->
-    <header id="top-bar" class="w-full py-4 md:py-8">
-        <div class="w-full px-4 md:px-10 flex text-m tracking-widest">
-            <span class="text-4xl w-1/2">Teorie Grafů</span>
+    <header id="top-bar" class="w-full py-3 md:py-6">
+        <div class="w-full px-3 md:px-8 flex text-xs tracking-widest">
+            <span class="text-3xl w-1/2">Teorie Grafů</span>
             <div class="w-1/2 flex justify-between">
                 <span class="uppercase">Cajthamlovský projekt</span>
                 <span class="uppercase">Podzim 2025</span>
@@ -85,13 +87,13 @@
     </header>
 
     <!-- Main Content Grid -->
-    <main class="flex-grow w-full px-4 md:px-10 py-4 md:py-10 grid grid-cols-1 md:grid-cols-2 items-end">
+    <main class="flex-grow w-full px-3 md:px-8 py-3 md:py-8 grid grid-cols-1 md:grid-cols-2 items-end">
         <!-- Bottom Left: Explanation -->
-        <div class="space-y-4 mr-32 gap-6">
-            <p class="text-4xl mb-10">
+        <div class="space-y-3 mr-16 gap-5">
+            <p class="text-3xl mb-8">
                 Tato stránka se zabývá kombinatorickým problémem určení celkového počtu možných neorientovaných grafů na <i>n</i> vrcholech.
             </p>
-            <div class="flex gap-10 text-xl uppercase">
+            <div class="flex gap-8 text-lg uppercase">
                 <p>Andrej Pečeňa</p><p>&</p><p>Github Copilot</p>
             </div>
         </div>
@@ -101,13 +103,13 @@
             <div>
                 <!-- Tab 1 -->
                 <div class="tab-section">
-                    <div class="tab-trigger flex justify-between items-center py-4 cursor-pointer" data-target="content-1">
-                        <span class="text-xl">1. Nalezení vzorce</span>
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <div class="tab-trigger flex justify-between items-center py-3 cursor-pointer" data-target="content-1">
+                        <span class="text-lg">1. Nalezení vzorce</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </div>
                     <div id="content-1" class="tab-content">
                         <div class="tab-content-inner">
-                            <div class="space-y-4 text-gray-300 leading-relaxed text-lg">
+                            <div class="space-y-3 text-gray-300 leading-relaxed text-base">
                                 <p>Naším cílem je zjistit, kolik různých neorientovaných grafů může existovat na daném počtu vrcholů, který označíme jako <span class="font-semibold text-white">n</span>.</p>
                                 <p>Nejprve si ujasněme, co definuje graf. Graf je tvořen množinou vrcholů a množinou hran, které tyto vrcholy spojují. Pro náš případ uvažujeme <span class="font-semibold text-white">n</span> pevných, rozlišitelných vrcholů. Dva grafy se liší, pokud mají odlišnou množinu hran.</p>
                                 <p>Klíčová otázka tedy zní: kolik je všech možných hran, které mohou v grafu s <span class="font-semibold text-white">n</span> vrcholy existovat? Hrana v neorientovaném grafu je definována jako neuspořádaná dvojice různých vrcholů. To je klasická kombinatorická úloha: kolika způsoby můžeme vybrat 2 vrcholy z celkového počtu <span class="font-semibold text-white">n</span>?</p>
@@ -121,13 +123,13 @@
 
                 <!-- Tab 2 -->
                 <div class="tab-section">
-                    <div class="tab-trigger flex justify-between items-center py-4 cursor-pointer" data-target="content-2">
-                        <span class="text-xl">2. Důkaz správnosti</span>
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <div class="tab-trigger flex justify-between items-center py-3 cursor-pointer" data-target="content-2">
+                        <span class="text-lg">2. Důkaz správnosti</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </div>
                     <div id="content-2" class="tab-content">
                         <div class="tab-content-inner">
-                            <div class="space-y-4 text-gray-300 leading-relaxed text-lg">
+                            <div class="space-y-3 text-gray-300 leading-relaxed text-base">
                                 <p>Důkaz si můžeme představit pomocí jednoduché myšlenkové úvahy.</p>
                                 <ol class="list-decimal list-inside space-y-3">
                                     <li><strong>Představme si všechny možné hrany:</strong> Máme <span class="font-semibold text-white">n</span> vrcholů. Jak jsme si ukázali v předchozí kapitole, maximální počet hran, které mezi nimi mohou vést, je přesně \(\binom{n}{2}\). Můžeme si představit seznam všech těchto \(\binom{n}{2}\) potenciálních hran.</li>
@@ -144,33 +146,33 @@
 
                 <!-- Tab 3 -->
                 <div class="tab-section">
-                    <div class="tab-trigger flex justify-between items-center py-4 cursor-pointer" data-target="content-3">
-                        <span class="text-xl">3. Tabulka hodnot</span>
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <div class="tab-trigger flex justify-between items-center py-3 cursor-pointer" data-target="content-3">
+                        <span class="text-lg">3. Tabulka hodnot</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </div>
                     <div id="content-3" class="tab-content">
                         <div class="tab-content-inner">
-                            <h3 class="text-2xl font-bold mb-4">Počet grafů pro n = 1 až 10</h3>
+                            <h3 class="text-xl font-bold mb-3">Počet grafů pro n = 1 až 10</h3>
                             <div class="overflow-x-auto">
                                 <table class="min-w-full text-left border-collapse">
                                     <thead class="border-b border-gray-700">
                                         <tr>
-                                            <th class="p-4 font-bold text-white">Počet vrcholů (n)</th>
-                                            <th class="p-4 font-bold text-white">Počet možných hran \(\binom{n}{2}\)</th>
-                                            <th class="p-4 font-bold text-white">Celkový počet grafů \(2^{\binom{n}{2}}\)</th>
+                                            <th class="p-3 font-bold text-white">Počet vrcholů (n)</th>
+                                            <th class="p-3 font-bold text-white">Počet možných hran \(\binom{n}{2}\)</th>
+                                            <th class="p-3 font-bold text-white">Celkový počet grafů \(2^{\binom{n}{2}}\)</th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-gray-300">
-                                        <tr class="border-b border-gray-800"><td class="p-4">1</td><td class="p-4">0</td><td class="p-4">1</td></tr>
-                                        <tr class="border-b border-gray-800"><td class="p-4">2</td><td class="p-4">1</td><td class="p-4">2</td></tr>
-                                        <tr class="border-b border-gray-800"><td class="p-4">3</td><td class="p-4">3</td><td class="p-4">8</td></tr>
-                                        <tr class="border-b border-gray-800"><td class="p-4">4</td><td class="p-4">6</td><td class="p-4">64</td></tr>
-                                        <tr class="border-b border-gray-800"><td class="p-4">5</td><td class="p-4">10</td><td class="p-4">1 024</td></tr>
-                                        <tr class="border-b border-gray-800"><td class="p-4">6</td><td class="p-4">15</td><td class="p-4">32 768</td></tr>
-                                        <tr class="border-b border-gray-800"><td class="p-4">7</td><td class="p-4">21</td><td class="p-4">2 097 152</td></tr>
-                                        <tr class="border-b border-gray-800"><td class="p-4">8</td><td class="p-4">28</td><td class="p-4">268 435 456</td></tr>
-                                        <tr class="border-b border-gray-800"><td class="p-4">9</td><td class="p-4">36</td><td class="p-4">68 719 476 736</td></tr>
-                                        <tr class="border-b border-gray-800"><td class="p-4">10</td><td class="p-4">45</td><td class="p-4">35 184 372 088 832</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-3">1</td><td class="p-3">0</td><td class="p-3">1</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-3">2</td><td class="p-3">1</td><td class="p-3">2</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-3">3</td><td class="p-3">3</td><td class="p-3">8</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-3">4</td><td class="p-3">6</td><td class="p-3">64</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-3">5</td><td class="p-3">10</td><td class="p-3">1 024</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-3">6</td><td class="p-3">15</td><td class="p-3">32 768</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-3">7</td><td class="p-3">21</td><td class="p-3">2 097 152</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-3">8</td><td class="p-3">28</td><td class="p-3">268 435 456</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-3">9</td><td class="p-3">36</td><td class="p-3">68 719 476 736</td></tr>
+                                        <tr class="border-b border-gray-800"><td class="p-3">10</td><td class="p-3">45</td><td class="p-3">35 184 372 088 832</td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -180,13 +182,13 @@
 
                 <!-- Tab 4 -->
                 <div class="tab-section">
-                    <div class="tab-trigger flex justify-between items-center py-4 cursor-pointer" data-target="content-4">
-                        <span class="text-xl">4. Asymptotický růst</span>
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <div class="tab-trigger flex justify-between items-center py-3 cursor-pointer" data-target="content-4">
+                        <span class="text-lg">4. Asymptotický růst</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </div>
                     <div id="content-4" class="tab-content">
                         <div class="tab-content-inner">
-                            <div class="space-y-4 text-gray-300 leading-relaxed text-lg">
+                            <div class="space-y-3 text-gray-300 leading-relaxed text-base">
                                 <p>Zajímá nás, jak rychle roste počet grafů v závislosti na počtu vrcholů <span class="font-semibold text-white">n</span>, když se <span class="font-semibold text-white">n</span> blíží k nekonečnu. K tomu používáme O-notaci.</p>
                                 <p>Náš vzorec je \(f(n) = 2^{\frac{n(n-1)}{2}} = 2^{\frac{n^2 - n}{2}}\).</p>
                                 <p>Pro velká <span class="font-semibold text-white">n</span> je člen <span class="font-semibold text-white">\(n^2\)</span> v exponentu dominantní a člen <span class="font-semibold text-white">\(-n\)</span> je zanedbatelný. Můžeme tedy říci, že funkce roste zhruba jako \(2^{\frac{n^2}{2}}\).</p>
@@ -247,7 +249,7 @@
             const openTab = (trigger, content, duration = 0.4) => {
                 trigger.classList.add('active');
                 const targetHeight = getContentHeight(content);
-                const maxViewportHeight = window.innerHeight * 0.6;
+                const maxViewportHeight = window.innerHeight * 0.55;
                 
                 // Determine final height and overflow state upfront
                 const finalHeight = Math.min(targetHeight, maxViewportHeight);
